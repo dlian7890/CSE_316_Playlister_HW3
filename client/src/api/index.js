@@ -35,6 +35,7 @@ const apis = {
   getPlaylistById,
   createPlaylist,
   updatePlaylistById,
+  deletePlaylistById,
 };
 
 export default apis;

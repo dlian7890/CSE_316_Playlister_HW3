@@ -16,7 +16,8 @@ function ListCard(props) {
   const { idNamePair, selected } = props;
 
   const handleDeleteList = (event) => {
-    let id = event.target.id.substring('list-'.length);
+    let id = event.target.id.substring('delete-list-'.length);
+    console.log(id);
     store.deletePlaylist(id);
   };
 

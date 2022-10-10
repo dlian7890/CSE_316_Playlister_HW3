@@ -107,7 +107,7 @@ updatePlaylistById = async (req, res) => {
 };
 
 deletePlaylistById = async (req, res) => {
-  Playlist.findOne({ _id: req.params.id }, (err, list) => {
+  Playlist.findOneAndDelete({ _id: req.params.id }, (err, list) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
