@@ -15,6 +15,11 @@ function ListCard(props) {
   store.history = useHistory();
   const { idNamePair, selected } = props;
 
+  const handleDeleteList = (event) => {
+    let id = event.target.id.substring('list-'.length);
+    store.deletePlaylist(id);
+  };
+
   function handleLoadList(event) {
     if (!event.target.disabled) {
       let _id = event.target.id;
@@ -78,6 +83,7 @@ function ListCard(props) {
         type='button'
         id={'delete-list-' + idNamePair._id}
         className='list-card-button'
+        onClick={handleDeleteList}
         value={'\u2715'}
       />
       <input

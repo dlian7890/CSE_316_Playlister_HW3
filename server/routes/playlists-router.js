@@ -12,6 +12,7 @@ router.post('/playlist', PlaylistController.createPlaylist);
 router.get('/playlist/:id', PlaylistController.getPlaylistById);
 router.get('/playlists', PlaylistController.getPlaylists);
 router.get('/playlistpairs', PlaylistController.getPlaylistPairs);
-router.put('/playlists/:id', PlaylistController.updatePlaylistById);
+router.put('/playlist/:id', PlaylistController.updatePlaylistById);
+router.delete('/playlist/:id', PlaylistController.deletePlaylistById);
 
 module.exports = router;
