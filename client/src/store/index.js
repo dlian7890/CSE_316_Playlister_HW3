@@ -274,7 +274,7 @@ export const useGlobalStore = () => {
       }
       list.songs[end] = temp;
     }
-    async function asyncMoveSong(playlist) {
+    async function asyncUpdatePlaylist(playlist) {
       let response = await api.updatePlaylistById(playlist._id, playlist);
       if (response.data.success) {
         console.log(response.data.playlist);
@@ -282,24 +282,45 @@ export const useGlobalStore = () => {
           type: GlobalStoreActionType.SET_CURRENT_LIST,
           payload: response.data.playlist,
         });
-        // async function updateCurrentList() {
-        //   response = await api.getPlaylistById(playlist._id);
-        //   if (response.data.success) {
-        //     let updatedList = response.data.playlist;
-        //     console.log(updatedList);
-        //     storeReducer({
-        //       type: GlobalStoreActionType.SET_CURRENT_LIST,
-        //       payload: {
-        //         playlist: updatedList,
-        //       },
-        //     });
-        //   }
-        // }
-        // updateCurrentList();
       }
     }
 
-    asyncMoveSong(list);
+    asyncUpdatePlaylist(list);
+  };
+
+  store.deleteSong = (idx) => {
+    const list = store.currentList;
+    list.songs.splice(idx, 1);
+    async function asyncUpdatePlaylist(playlist) {
+      let response = await api.updatePlaylistById(playlist._id, playlist);
+      if (response.data.success) {
+        console.log(response.data.playlist);
+        storeReducer({
+          type: GlobalStoreActionType.SET_CURRENT_LIST,
+          payload: response.data.playlist,
+        });
+      }
+    }
+
+    asyncUpdatePlaylist(list);
+  };
+
+  store.addSong = (title, artist, youTubeId) => {
+    const list = store.currentList;
+    const song = { title: title, artist: artist, youTubeId: youTubeId };
+    list.songs.push(song);
+    async function asyncUpdatePlaylist(playlist) {
+      let response = await api.updatePlaylistById(playlist._id, playlist);
+      if (response.data.success) {
+        console.log(response.data.playlist);
+        storeReducer({
+          type: GlobalStoreActionType.SET_CURRENT_LIST,
+          payload: response.data.playlist,
+        });
+      }
+    }
+
+    asyncUpdatePlaylist(list);
   };
 
   // THIS GIVES OUR STORE AND ITS REDUCER TO ANY COMPONENT THAT NEEDS IT

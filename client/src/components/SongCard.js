@@ -37,6 +37,11 @@ function SongCard(props) {
     store.moveSong(parseInt(sourceId), parseInt(targetId));
   };
 
+  const handleDeleteSong = (event) => {
+    event.preventDefault();
+    store.deleteSong(index);
+  };
+
   const { song, index } = props;
   let cardClass = 'list-card unselected-list-card';
   return (
@@ -64,9 +69,7 @@ function SongCard(props) {
         id={'remove-song-' + index}
         className='list-card-button'
         value={'\u2715'}
-        onClick={() => {
-          console.log(store.currentList);
-        }}
+        onClick={handleDeleteSong}
       />
     </div>
   );
