@@ -372,6 +372,24 @@ export const useGlobalStore = () => {
     asyncUpdatePlaylist(list);
   };
 
+  store.editSong = (editedSong) => {
+    const list = store.currentList;
+    let song = list.songs[store.selectedSongIdx];
+    song.title = editedSong.title;
+    song.artist = editedSong.artist;
+    song.youTubeId = editedSong.youTubeId;
+    async function asyncUpdatePlaylist(playlist) {
+      let response = await api.updatePlaylistById(playlist._id, playlist);
+      if (response.data.success) {
+        storeReducer({
+          type: GlobalStoreActionType.SET_CURRENT_LIST,
+          payload: response.data.playlist,
+        });
+      }
+    }
+    asyncUpdatePlaylist(list);
+  };
+
   // THIS GIVES OUR STORE AND ITS REDUCER TO ANY COMPONENT THAT NEEDS IT
   return { store, storeReducer };
 };

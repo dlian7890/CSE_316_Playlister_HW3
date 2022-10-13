@@ -45,8 +45,18 @@ function SongCard(props) {
     };
     store.selectSong(index);
     showDeleteSongModal();
+  };
 
-    // store.deleteSong(index);
+  const handleEditSong = (event) => {
+    event.preventDefault();
+    // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
+    // TO SEE IF THEY REALLY WANT TO EDIT THE SONG
+    const showEditSongModal = () => {
+      let modal = document.getElementById('edit-song-modal');
+      modal.classList.add('is-visible');
+    };
+    store.selectSong(index);
+    showEditSongModal();
   };
 
   const { song, index } = props;
@@ -62,6 +72,7 @@ function SongCard(props) {
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       draggable='true'
+      onDoubleClick={handleEditSong}
     >
       {index + 1}.
       <a
