@@ -87,6 +87,7 @@ getPlaylistPairs = async (req, res) => {
 };
 
 updatePlaylistById = async (req, res) => {
+  console.log('adawad');
   const body = req.body;
   console.log('createPlaylist body: ' + body);
   const playlist = new Playlist(body);

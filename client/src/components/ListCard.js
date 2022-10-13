@@ -17,8 +17,12 @@ function ListCard(props) {
 
   const handleDeleteList = (event) => {
     let id = event.target.id.substring('delete-list-'.length);
-    console.log(id);
-    store.deletePlaylist(id);
+    const showDeleteListModal = () => {
+      let modal = document.getElementById('delete-list-modal');
+      modal.classList.add('is-visible');
+    };
+    store.selectListToDelete(id);
+    showDeleteListModal();
   };
 
   function handleLoadList(event) {

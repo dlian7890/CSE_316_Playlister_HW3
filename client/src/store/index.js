@@ -18,6 +18,8 @@ export const GlobalStoreActionType = {
   LOAD_ID_NAME_PAIRS: 'LOAD_ID_NAME_PAIRS',
   SET_CURRENT_LIST: 'SET_CURRENT_LIST',
   SET_LIST_NAME_EDIT_ACTIVE: 'SET_LIST_NAME_EDIT_ACTIVE',
+  SELECT_LIST_TO_DELETE: 'SELECT_LIST_TO_DELETE',
+  SELECT_SONG: 'SELECT_SONG',
 };
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -32,6 +34,8 @@ export const useGlobalStore = () => {
     currentList: null,
     newListCounter: 0,
     listNameActive: false,
+    selectedListId: '',
+    selectedSongIdx: -1,
   });
 
   // HERE'S THE DATA STORE'S REDUCER, IT MUST
@@ -46,6 +50,8 @@ export const useGlobalStore = () => {
           currentList: payload.playlist,
           newListCounter: store.newListCounter,
           listNameActive: false,
+          selectedListId: '',
+          selectedSongIdx: -1,
         });
       }
       // STOP EDITING THE CURRENT LIST
@@ -55,6 +61,8 @@ export const useGlobalStore = () => {
           currentList: null,
           newListCounter: store.newListCounter,
           listNameActive: false,
+          selectedListId: '',
+          selectedSongIdx: -1,
         });
       }
       // CREATE A NEW LIST
@@ -64,6 +72,8 @@ export const useGlobalStore = () => {
           currentList: payload,
           newListCounter: store.newListCounter + 1,
           listNameActive: false,
+          selectedListId: '',
+          selectedSongIdx: -1,
         });
       }
       // GET ALL THE LISTS SO WE CAN PRESENT THEM
@@ -73,6 +83,8 @@ export const useGlobalStore = () => {
           currentList: null,
           newListCounter: store.newListCounter,
           listNameActive: false,
+          selectedListId: '',
+          selectedSongIdx: -1,
         });
       }
       // PREPARE TO DELETE A LIST
@@ -82,6 +94,8 @@ export const useGlobalStore = () => {
           currentList: null,
           newListCounter: store.newListCounter,
           listNameActive: false,
+          selectedListId: '',
+          selectedSongIdx: -1,
         });
       }
       // UPDATE A LIST
@@ -91,6 +105,8 @@ export const useGlobalStore = () => {
           currentList: payload,
           newListCounter: store.newListCounter,
           listNameActive: false,
+          selectedListId: '',
+          selectedSongIdx: -1,
         });
       }
       // START EDITING A LIST NAME
@@ -100,6 +116,29 @@ export const useGlobalStore = () => {
           currentList: payload,
           newListCounter: store.newListCounter,
           listNameActive: true,
+          selectedListId: '',
+          selectedSongIdx: -1,
+        });
+      }
+      // SELECT LIST TO DELETE
+      case GlobalStoreActionType.SELECT_LIST_TO_DELETE: {
+        return setStore({
+          idNamePairs: store.idNamePairs,
+          currentList: null,
+          newListCounter: store.newListCounter,
+          listNameActive: false,
+          selectedListId: payload,
+          selectedSongIdx: -1,
+        });
+      }
+      case GlobalStoreActionType.SELECT_SONG: {
+        return setStore({
+          idNamePairs: store.idNamePairs,
+          currentList: store.currentList,
+          newListCounter: store.newListCounter,
+          listNameActive: false,
+          selectedListId: '',
+          selectedSongIdx: payload,
         });
       }
       default:
@@ -223,6 +262,13 @@ export const useGlobalStore = () => {
     asyncCreateNewList();
   };
 
+  store.selectListToDelete = (id) => {
+    storeReducer({
+      type: GlobalStoreActionType.SELECT_LIST_TO_DELETE,
+      payload: id,
+    });
+  };
+
   store.deletePlaylist = (id) => {
     // GET THE LIST
     async function asyncDeletePlaylist(id) {
@@ -263,7 +309,6 @@ export const useGlobalStore = () => {
     if (start < end) {
       let temp = list.songs[start];
       for (let i = start; i < end; i++) {
-        console.log(i + 1);
         list.songs[i] = list.songs[i + 1];
       }
       list.songs[end] = temp;
@@ -277,7 +322,6 @@ export const useGlobalStore = () => {
     async function asyncUpdatePlaylist(playlist) {
       let response = await api.updatePlaylistById(playlist._id, playlist);
       if (response.data.success) {
-        console.log(response.data.playlist);
         storeReducer({
           type: GlobalStoreActionType.SET_CURRENT_LIST,
           payload: response.data.playlist,
@@ -288,13 +332,19 @@ export const useGlobalStore = () => {
     asyncUpdatePlaylist(list);
   };
 
+  store.selectSong = (idx) => {
+    storeReducer({
+      type: GlobalStoreActionType.SELECT_SONG,
+      payload: idx,
+    });
+  };
+
   store.deleteSong = (idx) => {
     const list = store.currentList;
     list.songs.splice(idx, 1);
     async function asyncUpdatePlaylist(playlist) {
       let response = await api.updatePlaylistById(playlist._id, playlist);
       if (response.data.success) {
-        console.log(response.data.playlist);
         storeReducer({
           type: GlobalStoreActionType.SET_CURRENT_LIST,
           payload: response.data.playlist,
@@ -312,7 +362,6 @@ export const useGlobalStore = () => {
     async function asyncUpdatePlaylist(playlist) {
       let response = await api.updatePlaylistById(playlist._id, playlist);
       if (response.data.success) {
-        console.log(response.data.playlist);
         storeReducer({
           type: GlobalStoreActionType.SET_CURRENT_LIST,
           payload: response.data.playlist,

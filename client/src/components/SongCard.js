@@ -39,7 +39,14 @@ function SongCard(props) {
 
   const handleDeleteSong = (event) => {
     event.preventDefault();
-    store.deleteSong(index);
+    const showDeleteSongModal = () => {
+      let modal = document.getElementById('delete-song-modal');
+      modal.classList.add('is-visible');
+    };
+    store.selectSong(index);
+    showDeleteSongModal();
+
+    // store.deleteSong(index);
   };
 
   const { song, index } = props;
