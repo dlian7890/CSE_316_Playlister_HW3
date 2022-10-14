@@ -87,7 +87,6 @@ getPlaylistPairs = async (req, res) => {
 };
 
 updatePlaylistById = async (req, res) => {
-  console.log('adawad');
   const body = req.body;
   console.log('createPlaylist body: ' + body);
   const playlist = new Playlist(body);
@@ -98,17 +97,21 @@ updatePlaylistById = async (req, res) => {
     });
   }
 
-  Playlist.findOneAndUpdate({ _id: req.params.id }, playlist, (err, list) => {
-    if (err) {
-      return res.status(400).json({ success: false, error: err });
-    }
+  await Playlist.findOneAndUpdate(
+    { _id: req.params.id },
+    playlist,
+    (err, list) => {
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
 
-    return res.status(200).json({ success: true, playlist: list });
-  }).catch((err) => console.log(err));
+      return res.status(200).json({ success: true, playlist: list });
+    }
+  ).catch((err) => console.log(err));
 };
 
 deletePlaylistById = async (req, res) => {
-  Playlist.findOneAndDelete({ _id: req.params.id }, (err, list) => {
+  await Playlist.findOneAndDelete({ _id: req.params.id }, (err, list) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }

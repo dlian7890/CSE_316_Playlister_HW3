@@ -258,6 +258,13 @@ export const useGlobalStore = () => {
   store.hasCurrentList = () => {
     return store.currentList !== null;
   };
+  store.getPlaylistNameById = (id) => {
+    const idNamePairs = store.idNamePairs;
+    const name = idNamePairs.filter((item) => {
+      return item._id === id;
+    })[0].name;
+    return name;
+  };
 
   // THIS FUNCTION ENABLES THE PROCESS OF EDITING A LIST NAME
   store.setListNameActive = function () {

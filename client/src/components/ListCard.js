@@ -16,6 +16,7 @@ function ListCard(props) {
   const { idNamePair, selected } = props;
 
   const handleDeleteList = (event) => {
+    event.stopPropagation();
     let id = event.target.id.substring('delete-list-'.length);
     const showDeleteListModal = () => {
       let modal = document.getElementById('delete-list-modal');
@@ -52,7 +53,6 @@ function ListCard(props) {
   function handleKeyPress(event) {
     if (event.code === 'Enter') {
       let id = event.target.id.substring('list-'.length);
-      console.log(text);
       store.changeListName(id, text);
       toggleEdit();
     }
