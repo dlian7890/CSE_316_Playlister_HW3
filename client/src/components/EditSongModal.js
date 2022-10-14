@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { __RouterContext } from 'react-router';
 import { GlobalStoreContext } from '../store';
 
@@ -12,15 +12,22 @@ const EditSongModal = () => {
   const hideEditSongModal = () => {
     let modal = document.getElementById('edit-song-modal');
     modal.classList.remove('is-visible');
-    let editedSong = { title: title, artist: artist, youTubeId: youTubeId };
-    store.editSong(editedSong);
   };
   const handleEditSong = () => {
+    let editedSong = { title: title, artist: artist, youTubeId: youTubeId };
+    store.addEditSongTransaction(editedSong);
     setTitle('');
     setArtist('');
     setYouTubeId('');
     hideEditSongModal();
   };
+
+  useEffect(() => {
+    setTitle(store.selectedSong.title);
+    setArtist(store.selectedSong.artist);
+    setYouTubeId(store.selectedSong.youTubeId);
+  }, [store.selectedSong]);
+
   return (
     <div class='modal' id='edit-song-modal' data-animation='slideInOutLeft'>
       <div class='modal-root' id='verify-edit-song-root'>

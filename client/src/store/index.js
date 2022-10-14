@@ -4,6 +4,7 @@ import api from '../api';
 import AddSong_Transaction from '../transactions/AddSong_Transaction';
 import DeleteSong_Transaction from '../transactions/DeleteSong_Transaction';
 import MoveSong_Transaction from '../transactions/MoveSong_Transaction';
+import EditSong_Transaction from '../transactions/EditSong_Transaction';
 export const GlobalStoreContext = createContext({});
 /*
     This is our global data store. Note that it uses the Flux design pattern,
@@ -39,6 +40,7 @@ export const useGlobalStore = () => {
     listNameActive: false,
     selectedListId: '',
     selectedSongIdx: -1,
+    selectedSong: { title: '', artist: '', youTubeId: '' },
   });
 
   // HERE'S THE DATA STORE'S REDUCER, IT MUST
@@ -55,6 +57,7 @@ export const useGlobalStore = () => {
           listNameActive: false,
           selectedListId: '',
           selectedSongIdx: -1,
+          selectedSong: { title: '', artist: '', youTubeId: '' },
         });
       }
       // STOP EDITING THE CURRENT LIST
@@ -66,6 +69,7 @@ export const useGlobalStore = () => {
           listNameActive: false,
           selectedListId: '',
           selectedSongIdx: -1,
+          selectedSong: { title: '', artist: '', youTubeId: '' },
         });
       }
       // CREATE A NEW LIST
@@ -77,6 +81,7 @@ export const useGlobalStore = () => {
           listNameActive: false,
           selectedListId: '',
           selectedSongIdx: -1,
+          selectedSong: { title: '', artist: '', youTubeId: '' },
         });
       }
       // GET ALL THE LISTS SO WE CAN PRESENT THEM
@@ -88,6 +93,7 @@ export const useGlobalStore = () => {
           listNameActive: false,
           selectedListId: '',
           selectedSongIdx: -1,
+          selectedSong: { title: '', artist: '', youTubeId: '' },
         });
       }
       // PREPARE TO DELETE A LIST
@@ -99,6 +105,7 @@ export const useGlobalStore = () => {
           listNameActive: false,
           selectedListId: '',
           selectedSongIdx: -1,
+          selectedSong: { title: '', artist: '', youTubeId: '' },
         });
       }
       // UPDATE A LIST
@@ -110,6 +117,7 @@ export const useGlobalStore = () => {
           listNameActive: false,
           selectedListId: '',
           selectedSongIdx: -1,
+          selectedSong: { title: '', artist: '', youTubeId: '' },
         });
       }
       // START EDITING A LIST NAME
@@ -121,6 +129,7 @@ export const useGlobalStore = () => {
           listNameActive: true,
           selectedListId: '',
           selectedSongIdx: -1,
+          selectedSong: { title: '', artist: '', youTubeId: '' },
         });
       }
       // SELECT LIST TO DELETE
@@ -132,6 +141,7 @@ export const useGlobalStore = () => {
           listNameActive: false,
           selectedListId: payload,
           selectedSongIdx: -1,
+          selectedSong: { title: '', artist: '', youTubeId: '' },
         });
       }
       case GlobalStoreActionType.SELECT_SONG: {
@@ -141,7 +151,8 @@ export const useGlobalStore = () => {
           newListCounter: store.newListCounter,
           listNameActive: false,
           selectedListId: '',
-          selectedSongIdx: payload,
+          selectedSongIdx: payload.idx,
+          selectedSong: payload.song,
         });
       }
       default:
@@ -345,9 +356,10 @@ export const useGlobalStore = () => {
   };
 
   store.selectSong = (idx) => {
+    const song = store.currentList.songs[idx];
     storeReducer({
       type: GlobalStoreActionType.SELECT_SONG,
-      payload: idx,
+      payload: { idx: idx, song: song },
     });
   };
 
@@ -394,9 +406,9 @@ export const useGlobalStore = () => {
     tps.addTransaction(transaction);
   };
 
-  store.editSong = (editedSong) => {
+  store.editSong = (songIdx, editedSong) => {
     const list = store.currentList;
-    let song = list.songs[store.selectedSongIdx];
+    let song = list.songs[songIdx];
     song.title = editedSong.title;
     song.artist = editedSong.artist;
     song.youTubeId = editedSong.youTubeId;
@@ -410,6 +422,22 @@ export const useGlobalStore = () => {
       }
     }
     asyncUpdatePlaylist(list);
+  };
+
+  store.addEditSongTransaction = (editedSong) => {
+    const uneditedSong = store.currentList.songs[store.selectedSongIdx];
+    const uneditedSongClone = {
+      title: uneditedSong.title,
+      artist: uneditedSong.artist,
+      youTubeId: uneditedSong.youTubeId,
+    };
+    const transaction = new EditSong_Transaction(
+      store,
+      store.selectedSongIdx,
+      uneditedSongClone,
+      editedSong
+    );
+    tps.addTransaction(transaction);
   };
 
   // THIS GIVES OUR STORE AND ITS REDUCER TO ANY COMPONENT THAT NEEDS IT
