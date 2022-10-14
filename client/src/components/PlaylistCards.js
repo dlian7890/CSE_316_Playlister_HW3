@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import SongCard from './SongCard.js';
 import { GlobalStoreContext } from '../store';
@@ -11,6 +11,26 @@ import { GlobalStoreContext } from '../store';
 function PlaylistCards() {
   const { store } = useContext(GlobalStoreContext);
   store.history = useHistory();
+  const handleUndoRedo = (event) => {
+    let canUndo = store.canUndo();
+    let canRedo = store.canRedo();
+    if (event.ctrlKey) {
+      if (event.keyCode === 90) {
+        event.preventDefault();
+        if (canUndo) store.undo();
+      } else if (event.keyCode === 89) {
+        event.preventDefault();
+        if (canRedo) store.redo();
+      }
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleUndoRedo);
+    return () => {
+      document.removeEventListener('keydown', handleUndoRedo);
+    };
+  });
 
   return (
     <div id='playlist-cards'>
