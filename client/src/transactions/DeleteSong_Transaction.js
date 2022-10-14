@@ -19,7 +19,6 @@ export default class RemoveSong_Transaction extends jsTPS_Transaction {
   }
 
   undoTransaction() {
-    console.log(this.removedSong);
     this.store.addSong(this.songIdx, this.removedSong);
   }
 }

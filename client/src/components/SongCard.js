@@ -34,7 +34,7 @@ function SongCard(props) {
     setIsDragging(false);
     setDraggedTo(false);
     // ASK THE MODEL TO MOVE THE DATA
-    store.moveSong(parseInt(sourceId), parseInt(targetId));
+    store.addMoveSongTransaction(parseInt(sourceId), parseInt(targetId));
   };
 
   const handleDeleteSong = (event) => {
