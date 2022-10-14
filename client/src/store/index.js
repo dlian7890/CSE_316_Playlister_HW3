@@ -202,6 +202,7 @@ export const useGlobalStore = () => {
       type: GlobalStoreActionType.CLOSE_CURRENT_LIST,
       payload: {},
     });
+    tps.clearAllTransactions();
   };
 
   // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
@@ -246,6 +247,16 @@ export const useGlobalStore = () => {
   };
   store.redo = function () {
     tps.doTransaction();
+  };
+
+  store.canUndo = () => {
+    return tps.hasTransactionToUndo();
+  };
+  store.canRedo = () => {
+    return tps.hasTransactionToRedo();
+  };
+  store.hasCurrentList = () => {
+    return store.currentList !== null;
   };
 
   // THIS FUNCTION ENABLES THE PROCESS OF EDITING A LIST NAME

@@ -22,8 +22,8 @@ const DeleteSongModal = () => {
         <div class='modal-north'>Remove song?</div>
         <div class='modal-center'>
           <div class='modal-center-content'>
-            Are you sure you wish to permanently delete the song
-            <span id='song-title-text'>songTitle</span>?
+            Are you sure you wish to permanently delete the song,{' '}
+            <span id='song-title-text'>{songTitle}</span>?
           </div>
         </div>
         <div class='modal-south'>

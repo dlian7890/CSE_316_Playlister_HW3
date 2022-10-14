@@ -26,16 +26,16 @@ function EditToolbar() {
     history.push('/');
     store.closeCurrentList();
   }
-  let editStatus = false;
-  if (store.isListNameEditActive) {
-    editStatus = true;
-  }
+  // let editStatus = false;
+  // if (store.currentList != null) {
+  //   editStatus = true;
+  // }
   return (
     <span id='edit-toolbar'>
       <input
         type='button'
         id='add-song-button'
-        disabled={editStatus}
+        disabled={!store.hasCurrentList()}
         value='+'
         className={enabledButtonClass}
         onClick={handleAddSong}
@@ -43,7 +43,7 @@ function EditToolbar() {
       <input
         type='button'
         id='undo-button'
-        disabled={editStatus}
+        disabled={!store.canUndo()}
         value='⟲'
         className={enabledButtonClass}
         onClick={handleUndo}
@@ -51,7 +51,7 @@ function EditToolbar() {
       <input
         type='button'
         id='redo-button'
-        disabled={editStatus}
+        disabled={!store.canRedo()}
         value='⟳'
         className={enabledButtonClass}
         onClick={handleRedo}
@@ -59,7 +59,7 @@ function EditToolbar() {
       <input
         type='button'
         id='close-button'
-        disabled={editStatus}
+        disabled={!store.hasCurrentList()}
         value='&#x2715;'
         className={enabledButtonClass}
         onClick={handleClose}
