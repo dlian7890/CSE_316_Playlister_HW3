@@ -14,7 +14,12 @@ export default class AddSong_Transaction extends jsTPS_Transaction {
   }
 
   doTransaction() {
-    this.store.addSong('Untitled', 'Unknown', 'dQw4w9WgXcQ');
+    const song = {
+      title: 'Untitled',
+      artist: 'Unknown',
+      youTubeId: 'dQw4w9WgXcQ',
+    };
+    this.store.addSong(this.store.getPlaylistSize() - 1, song);
   }
 
   undoTransaction() {

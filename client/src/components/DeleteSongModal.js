@@ -8,7 +8,7 @@ const DeleteSongModal = () => {
     modal.classList.remove('is-visible');
   };
   const handleDeleteSong = () => {
-    store.deleteSong(store.selectedSongIdx);
+    store.addDeleteSongTransaction(store.selectedSongIdx);
     hideDeleteSongModal();
   };
   return (

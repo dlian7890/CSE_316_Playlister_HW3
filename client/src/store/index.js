@@ -2,6 +2,7 @@ import { createContext, useState } from 'react';
 import jsTPS from '../common/jsTPS';
 import api from '../api';
 import AddSong_Transaction from '../transactions/AddSong_Transaction';
+import DeleteSong_Transaction from '../transactions/DeleteSong_Transaction';
 export const GlobalStoreContext = createContext({});
 /*
     This is our global data store. Note that it uses the Flux design pattern,
@@ -342,7 +343,7 @@ export const useGlobalStore = () => {
 
   store.deleteSong = (idx) => {
     const list = store.currentList;
-    list.songs.splice(idx, 1);
+    const removedSong = list.songs.splice(idx, 1)[0];
     async function asyncUpdatePlaylist(playlist) {
       let response = await api.updatePlaylistById(playlist._id, playlist);
       if (response.data.success) {
@@ -354,12 +355,17 @@ export const useGlobalStore = () => {
     }
 
     asyncUpdatePlaylist(list);
+    return removedSong;
   };
 
-  store.addSong = (title, artist, youTubeId) => {
+  store.addDeleteSongTransaction = (idx) => {
+    let transaction = new DeleteSong_Transaction(store, idx);
+    tps.addTransaction(transaction);
+  };
+
+  store.addSong = (songIdx, song) => {
     const list = store.currentList;
-    const song = { title: title, artist: artist, youTubeId: youTubeId };
-    list.songs.push(song);
+    list.songs.splice(songIdx, 0, song);
     async function asyncUpdatePlaylist(playlist) {
       let response = await api.updatePlaylistById(playlist._id, playlist);
       if (response.data.success) {
