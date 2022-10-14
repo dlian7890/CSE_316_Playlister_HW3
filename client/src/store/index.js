@@ -398,7 +398,8 @@ export const useGlobalStore = () => {
 
   store.addSong = (songIdx, song) => {
     const list = store.currentList;
-    list.songs.splice(songIdx, 0, song);
+    if (store.selectedSongIdx !== -1) list.songs.splice(songIdx, 0, song);
+    else list.songs.push(song);
     async function asyncUpdatePlaylist(playlist) {
       let response = await api.updatePlaylistById(playlist._id, playlist);
       if (response.data.success) {
