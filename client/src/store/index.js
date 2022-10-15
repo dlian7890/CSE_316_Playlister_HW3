@@ -313,22 +313,7 @@ export const useGlobalStore = () => {
         });
         async function deleteList(playlist) {
           response = await api.deletePlaylistById(playlist._id);
-          if (response.data.success) {
-            async function getListPairs(playlist) {
-              response = await api.getPlaylistPairs();
-              if (response.data.success) {
-                let pairsArray = response.data.idNamePairs;
-                storeReducer({
-                  type: GlobalStoreActionType.CHANGE_LIST_NAME,
-                  payload: {
-                    idNamePairs: pairsArray,
-                    playlist: playlist,
-                  },
-                });
-              }
-            }
-            getListPairs(playlist);
-          }
+          store.loadIdNamePairs();
         }
         deleteList(playlist);
       }
@@ -356,7 +341,7 @@ export const useGlobalStore = () => {
       if (response.data.success) {
         storeReducer({
           type: GlobalStoreActionType.SET_CURRENT_LIST,
-          payload: response.data.playlist,
+          payload: list,
         });
       }
     }
@@ -389,7 +374,7 @@ export const useGlobalStore = () => {
       if (response.data.success) {
         storeReducer({
           type: GlobalStoreActionType.SET_CURRENT_LIST,
-          payload: response.data.playlist,
+          payload: list,
         });
       }
     }
@@ -412,7 +397,7 @@ export const useGlobalStore = () => {
       if (response.data.success) {
         storeReducer({
           type: GlobalStoreActionType.SET_CURRENT_LIST,
-          payload: response.data.playlist,
+          payload: list,
         });
       }
     }
@@ -436,7 +421,7 @@ export const useGlobalStore = () => {
       if (response.data.success) {
         storeReducer({
           type: GlobalStoreActionType.SET_CURRENT_LIST,
-          payload: response.data.playlist,
+          payload: list,
         });
       }
     }
