@@ -51,8 +51,8 @@ export const useGlobalStore = () => {
       // LIST UPDATE OF ITS NAME
       case GlobalStoreActionType.CHANGE_LIST_NAME: {
         return setStore({
-          idNamePairs: payload.idNamePairs,
-          currentList: payload.playlist,
+          idNamePairs: payload,
+          currentList: store.playlist,
           newListCounter: store.newListCounter,
           listNameActive: false,
           selectedListId: '',
@@ -180,10 +180,7 @@ export const useGlobalStore = () => {
                 let pairsArray = response.data.idNamePairs;
                 storeReducer({
                   type: GlobalStoreActionType.CHANGE_LIST_NAME,
-                  payload: {
-                    idNamePairs: pairsArray,
-                    playlist: playlist,
-                  },
+                  payload: pairsArray,
                 });
               }
             }
